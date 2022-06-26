@@ -1,0 +1,19 @@
+version: "3.1"
+
+services:
+  postgres:
+    container_name: api_interns_manager-db
+    image: postgres:14.3-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: api_interns_manager
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+networks:
+  net:
+    driver: bridge
+volumes:
+  postgres-data:
+    driver: local
