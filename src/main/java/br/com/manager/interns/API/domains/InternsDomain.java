@@ -1,5 +1,6 @@
 package br.com.manager.interns.API.domains;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -43,12 +45,24 @@ public class InternsDomain {
   @Email
   private String email;
 
-  @ManyToMany
-  @Fetch(FetchMode.SUBSELECT)
+  @ManyToMany(mappedBy = "interns")
+  @JsonBackReference
   private List<BuddysDomain> buddys = new ArrayList<>();
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "Lead_ID")
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JsonBackReference
   private LeadDomain lead;
 
+  public void addBuddy(BuddysDomain buddyDomain) {
+    buddys.add(buddyDomain);
+  }
+
+  public void removeBuddy(BuddysDomain buddyDomain) {
+    buddys.remove(buddyDomain);
+  }
+
+
+  public void removeLead() {
+    lead = null;
+  }
 }

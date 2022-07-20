@@ -2,6 +2,7 @@ package br.com.manager.interns.API.service;
 
 import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.interfaces.dto.InternsDTO;
+import br.com.manager.interns.API.interfaces.dto.PutInternsDTO;
 import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
 import java.util.List;
 import java.util.UUID;
@@ -14,12 +15,10 @@ public interface InternsService {
 
   Page<ResponseInterns> getAllInterns(Pageable pageable, List<String> expand);
 
-  InternsDomain getInternsById(UUID internId);
+  ResponseInterns getInternsById(UUID internId, List<String> expand);
 
   void deleteInterns(UUID internId);
 
-  void patchInterns(UUID internId, InternsDTO internsDTO);
-
-  void putInterns(UUID internId, InternsDTO internsDTO);
+  void putInterns(UUID internId, PutInternsDTO internsDTO);
 
 }

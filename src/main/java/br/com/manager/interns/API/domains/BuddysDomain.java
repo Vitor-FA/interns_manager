@@ -1,5 +1,7 @@
 package br.com.manager.interns.API.domains;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +47,14 @@ public class BuddysDomain {
 
   @ManyToMany
   @Fetch(FetchMode.SUBSELECT)
+  @JsonBackReference
   private List<InternsDomain> interns = new ArrayList<>();
 
+  public void addInterns(List<InternsDomain> internsDomains) {
+    interns.addAll(internsDomains);
+  }
+
+  public void removeInterns(List<InternsDomain> internsDomains) {
+    interns.removeAll(internsDomains);
+  }
 }

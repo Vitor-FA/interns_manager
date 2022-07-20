@@ -4,6 +4,7 @@ import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.domains.LeadDomain;
 import br.com.manager.interns.API.interfaces.dto.InternsDTO;
 import br.com.manager.interns.API.interfaces.dto.LeadDTO;
+import br.com.manager.interns.API.interfaces.dto.PutLeadDTO;
 import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
 import br.com.manager.interns.API.interfaces.dto.ResponseLead;
 import java.util.List;
@@ -17,11 +18,9 @@ public interface LeadService {
 
   Page<ResponseLead> getAllLead(Pageable pageable, List<String> expand);
 
-  LeadDomain getLeadById(UUID leadId);
+  ResponseLead getLeadById(UUID leadId, List<String> expand);
 
   void deleteLead(UUID leadId);
 
-  void patchLead(UUID leadId, LeadDTO leadDTO);
-
-  void putLead(UUID leadId, LeadDTO leadDTO);
+  void putLead(UUID leadId, PutLeadDTO putLeadDTO);
 }

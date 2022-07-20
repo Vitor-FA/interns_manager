@@ -1,7 +1,10 @@
 package br.com.manager.interns.API.interfaces.controller;
 
+import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.interfaces.dto.BuddysDTO;
 import br.com.manager.interns.API.interfaces.dto.InternsDTO;
+import br.com.manager.interns.API.interfaces.dto.PutInternsDTO;
+import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
 import br.com.manager.interns.API.service.impl.BuddysServiceImpl;
 import br.com.manager.interns.API.service.impl.InternsServiceImpl;
 import java.util.List;
@@ -10,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -35,49 +39,48 @@ public class InternsController {
 
   @PostMapping
   public ResponseEntity<Void> postInterns(
-      @Valid @RequestBody InternsDTO InternsDTO
+      @Valid @RequestBody InternsDTO internsDTO
   ) {
+    internsService.postInterns(internsDTO);
     return ResponseEntity.ok().build();
   }
 
   @GetMapping
-  public ResponseEntity<Void> getAllInterns(
+  public ResponseEntity<Page<ResponseInterns>> getAllInterns(
       @PositiveOrZero @Valid @RequestParam(value = "_page") Integer page,
       @PositiveOrZero @Valid @RequestParam(value = "_size") Integer size,
       @RequestParam(value = "_expand", required = false) List<String> expand
   ) {
     Pageable pageable = PageRequest.of(page, size);
 
-    return ResponseEntity.ok().build();
+    var interns = internsService.getAllInterns(pageable, expand);
+
+    return ResponseEntity.ok(interns);
   }
 
   @GetMapping("/{internId}")
-  public ResponseEntity<Void> getInternsById(
-      @PathVariable(value = "internId") UUID internId
+  public ResponseEntity<ResponseInterns> getInternsById(
+      @PathVariable(value = "internId") UUID internId,
+      @RequestParam(value = "_expand", required = false) List<String> expand
   ) {
-    return ResponseEntity.ok().build();
+    var intern = internsService.getInternsById(internId, expand);
+    return ResponseEntity.ok(intern);
   }
 
   @DeleteMapping("/{internId}")
   public ResponseEntity<Void> deleteInterns(
       @PathVariable(value = "internId")UUID internId
   ) {
+    internsService.deleteInterns(internId);
     return ResponseEntity.ok().build();
-  }
-
-  @PatchMapping("/{internId}")
-  public ResponseEntity<Void> patchInterns(
-      @PathVariable(value = "internId")UUID internId,
-      @Valid @RequestBody InternsDTO InternsDTO
-  ) {
-    return ResponseEntity.noContent().build();
   }
 
   @PutMapping("/{internId}")
   public ResponseEntity<Void> putInterns(
       @PathVariable(value = "internId")UUID internId,
-      @Valid @RequestBody InternsDTO InternsDTO
+      @Valid @RequestBody PutInternsDTO putInternsDTO
   ) {
+    internsService.putInterns(internId, putInternsDTO);
     return ResponseEntity.noContent().build();
   }
 

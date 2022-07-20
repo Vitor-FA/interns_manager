@@ -2,6 +2,7 @@ package br.com.manager.interns.API.service;
 
 import br.com.manager.interns.API.domains.BuddysDomain;
 import br.com.manager.interns.API.interfaces.dto.BuddysDTO;
+import br.com.manager.interns.API.interfaces.dto.PutBuddysDTO;
 import br.com.manager.interns.API.interfaces.dto.ResponseBuddys;
 import java.util.List;
 import java.util.UUID;
@@ -14,12 +15,10 @@ public interface BuddysService {
 
   Page<ResponseBuddys> getAllBuddys(Pageable pageable, List<String> expand);
 
-  BuddysDomain getBuddysById(UUID buddyId);
+  ResponseBuddys getBuddysById(UUID buddyId, List<String> expand);
 
   void deleteBuddys(UUID buddyId);
 
-  void patchBuddys(UUID buddyId, BuddysDTO buddysDTO);
-
-  void putBuddys(UUID buddyId, BuddysDTO buddysDTO);
+  void putBuddys(UUID buddyId, PutBuddysDTO putBuddysDTO);
 
 }
