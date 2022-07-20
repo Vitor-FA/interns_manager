@@ -2,6 +2,9 @@ package br.com.manager.interns.API.interfaces.dto;
 
 import br.com.manager.interns.API.domains.BuddysDomain;
 import br.com.manager.interns.API.domains.LeadDomain;
+import br.com.manager.interns.API.interfaces.commun.InternsCommon;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +15,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @SuperBuilder
-public class ResponseInterns extends InternsDTO{
+@JsonInclude(Include.NON_NULL)
+public class ResponseInterns extends InternsCommon {
 
   private List<BuddysDomain> buddys;
 

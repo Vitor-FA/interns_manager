@@ -1,6 +1,6 @@
 package br.com.manager.interns.API.enums;
 
-public enum InternEnum {
+public enum InternsEnum {
 
   BUDDYS,
   LEAD

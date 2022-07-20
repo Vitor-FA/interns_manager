@@ -1,12 +1,15 @@
 package br.com.manager.interns.API.interfaces.controller;
 
 import br.com.manager.interns.API.interfaces.dto.BuddysDTO;
+import br.com.manager.interns.API.interfaces.dto.PutBuddysDTO;
+import br.com.manager.interns.API.interfaces.dto.ResponseBuddys;
 import br.com.manager.interns.API.service.impl.BuddysServiceImpl;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -34,47 +37,46 @@ public class BuddysController {
   public ResponseEntity<Void> postBuddys(
       @Valid @RequestBody BuddysDTO buddysDTO
   ) {
+    buddysService.postBuddys(buddysDTO);
     return ResponseEntity.ok().build();
   }
 
   @GetMapping
-  public ResponseEntity<Void> getAllBuddys(
+  public ResponseEntity<Page<ResponseBuddys>> getAllBuddys(
       @PositiveOrZero @Valid @RequestParam(value = "_page") Integer page,
       @PositiveOrZero @Valid @RequestParam(value = "_size") Integer size,
       @RequestParam(value = "_expand", required = false) List<String> expand
   ) {
     Pageable pageable = PageRequest.of(page, size);
 
-    return ResponseEntity.ok().build();
+    var buddys = buddysService.getAllBuddys(pageable, expand);
+
+    return ResponseEntity.ok(buddys);
   }
 
   @GetMapping("/{buddyId}")
-  public ResponseEntity<Void> getBuddysById(
-      @PathVariable(value = "buddyId")UUID buddyId
+  public ResponseEntity<ResponseBuddys> getBuddysById(
+      @PathVariable(value = "buddyId")UUID buddyId,
+      @RequestParam(value = "_expand", required = false) List<String> expand
   ) {
-    return ResponseEntity.ok().build();
+    var buddy = buddysService.getBuddysById(buddyId, expand);
+    return ResponseEntity.ok(buddy);
   }
 
   @DeleteMapping("/{buddyId}")
   public ResponseEntity<Void> deleteBuddys(
       @PathVariable(value = "buddyId")UUID buddyId
   ) {
+    buddysService.deleteBuddys(buddyId);
     return ResponseEntity.ok().build();
-  }
-
-  @PatchMapping("/{buddyId}")
-  public ResponseEntity<Void> patchBuddys(
-      @PathVariable(value = "buddyId")UUID buddyId,
-      @Valid @RequestBody BuddysDTO buddysDTO
-  ) {
-    return ResponseEntity.noContent().build();
   }
 
   @PutMapping("/{buddyId}")
   public ResponseEntity<Void> putBuddys(
       @PathVariable(value = "buddyId")UUID buddyId,
-      @Valid @RequestBody BuddysDTO buddysDTO
+      @Valid @RequestBody PutBuddysDTO buddysDTO
   ) {
+    buddysService.putBuddys(buddyId, buddysDTO);
     return ResponseEntity.noContent().build();
   }
 
