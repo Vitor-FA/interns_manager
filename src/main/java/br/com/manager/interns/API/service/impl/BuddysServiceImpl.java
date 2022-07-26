@@ -17,15 +17,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = {"buddys", "interns", "leads"}, keyGenerator = "CustomKeyGenerator")
 public class BuddysServiceImpl  implements BuddysService {
 
   private ModelMapper modelMapper = new ModelMapper();
@@ -34,6 +39,8 @@ public class BuddysServiceImpl  implements BuddysService {
   private BuddysRepository buddysRepository;
 
   @Override
+  @Transactional
+  @CacheEvict(allEntries = true)
   public void postBuddys(BuddysDTO buddysDTO) {
     modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -43,12 +50,16 @@ public class BuddysServiceImpl  implements BuddysService {
   }
 
   @Override
+  @Transactional(readOnly = true)
+  @Cacheable(unless = "#result.isEmpty()")
   public Page<ResponseBuddys> getAllBuddys(Pageable pageable, List<String> expand) {
     return this.buddysRepository.findAll(pageable).map(buddys ->
         ResponseBuddysMapper.convertToBuddysResponse(buddys, expand));
   }
 
   @Override
+  @Transactional(readOnly = true)
+  @Cacheable
   public ResponseBuddys getBuddysById(UUID buddyId, List<String> expand) {
     return this.buddysRepository.findById(buddyId).stream()
         .map(buddys -> ResponseBuddysMapper.convertToBuddysResponse(buddys, expand))
@@ -56,6 +67,8 @@ public class BuddysServiceImpl  implements BuddysService {
   }
 
   @Override
+  @Transactional
+  @CacheEvict(allEntries = true)
   public void deleteBuddys(UUID buddyId) {
     var buddys = findBuddyById(buddyId);
 
@@ -63,6 +76,8 @@ public class BuddysServiceImpl  implements BuddysService {
   }
 
   @Override
+  @Transactional
+  @CacheEvict(allEntries = true)
   public void putBuddys(UUID buddyId, PutBuddysDTO putBuddysDTO) {
     var mappedBuddy = modelMapper.map(putBuddysDTO, BuddysDomain.class);
     var buddy = findBuddyById(buddyId);

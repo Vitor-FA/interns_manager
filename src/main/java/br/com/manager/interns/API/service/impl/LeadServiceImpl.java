@@ -21,15 +21,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = {"buddys", "interns", "leads"}, keyGenerator = "CustomKeyGenerator")
 public class LeadServiceImpl implements LeadService {
 
   private ModelMapper modelMapper = new ModelMapper();
@@ -38,6 +43,8 @@ public class LeadServiceImpl implements LeadService {
   private LeadRepository leadRepository;
 
   @Override
+  @Transactional
+  @CacheEvict(allEntries = true)
   public void postLead(LeadDTO leadDTO) {
     checkIfEmailIsUnique(leadDTO.getEmail());
 
@@ -49,12 +56,16 @@ public class LeadServiceImpl implements LeadService {
   }
 
   @Override
+  @Transactional(readOnly = true)
+  @Cacheable(unless = "#result.isEmpty()")
   public Page<ResponseLead> getAllLead(Pageable pageable, List<String> expand) {
     return this.leadRepository.findAll(pageable).map(lead ->
         ResponseLeadMapper.convertToLeadResponse(lead, expand));
   }
 
   @Override
+  @Transactional(readOnly = true)
+  @Cacheable()
   public ResponseLead getLeadById(UUID leadId, List<String> expand) {
     return this.leadRepository.findById(leadId).stream()
         .map(lead -> ResponseLeadMapper.convertToLeadResponse(lead, expand))
@@ -62,6 +73,8 @@ public class LeadServiceImpl implements LeadService {
   }
 
   @Override
+  @Transactional
+  @CacheEvict(allEntries = true)
   public void deleteLead(UUID leadId) {
     var lead = findLeadById(leadId);
 
@@ -69,6 +82,8 @@ public class LeadServiceImpl implements LeadService {
   }
 
   @Override
+  @Transactional
+  @CacheEvict(allEntries = true)
   public void putLead(UUID leadId, PutLeadDTO putLeadDTO) {
     var mappedLead = modelMapper.map(putLeadDTO, LeadDomain.class);
     var lead = findLeadById(leadId);

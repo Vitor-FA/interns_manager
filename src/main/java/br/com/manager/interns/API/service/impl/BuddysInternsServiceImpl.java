@@ -7,8 +7,10 @@ import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.repository.BuddysRepository;
 import br.com.manager.interns.API.repository.InternsRepository;
 import br.com.manager.interns.API.service.BuddysInternsService;
+import java.lang.reflect.Array;
 import java.nio.channels.AlreadyConnectedException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,6 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SuperBuilder
 @Service
 @Slf4j
+@CacheConfig(cacheNames = {"buddys", "interns", "leads"}, keyGenerator = "CustomKeyGenerator")
 public class BuddysInternsServiceImpl implements BuddysInternsService {
 
   @Autowired
@@ -38,6 +43,7 @@ public class BuddysInternsServiceImpl implements BuddysInternsService {
 
   @Override
   @Transactional
+  @CacheEvict(allEntries = true)
   public ResponseEntity<CreatedAndNotCreatedObjects> createBuddyIntern(
       UUID buddyId,
       List<UUID> internsId) throws NotFoundException {
@@ -74,6 +80,7 @@ public class BuddysInternsServiceImpl implements BuddysInternsService {
 
   @Override
   @Transactional
+  @CacheEvict(allEntries = true)
   public ResponseEntity<DeletedAndNotDeletedObjects> deleteBuddyIntern(
       UUID buddyId,
       List<UUID> internsId) throws NotFoundException {
