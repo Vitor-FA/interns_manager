@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SuperBuilder
 @Service
 @Slf4j
+@CacheConfig(cacheNames = {"buddys", "interns", "leads"})
 public class LeadInternsServiceImpl implements LeadInternsService {
 
   @Autowired
@@ -40,6 +43,7 @@ public class LeadInternsServiceImpl implements LeadInternsService {
 
   @Override
   @Transactional
+  @CacheEvict(allEntries = true)
   public ResponseEntity<CreatedAndNotCreatedObjects> createLeadIntern(
       UUID LeadId,
       List<UUID> internsId) throws NotFoundException {
@@ -81,6 +85,7 @@ public class LeadInternsServiceImpl implements LeadInternsService {
 
   @Override
   @Transactional
+  @CacheEvict(allEntries = true)
   public ResponseEntity<DeletedAndNotDeletedObjects> deleteLeadIntern(
       UUID LeadId,
       List<UUID> internsId) throws NotFoundException {
