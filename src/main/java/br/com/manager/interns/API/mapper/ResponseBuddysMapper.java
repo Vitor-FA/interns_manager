@@ -1,16 +1,11 @@
 package br.com.manager.interns.API.mapper;
 
 import br.com.manager.interns.API.domains.BuddysDomain;
-import br.com.manager.interns.API.domains.InternsDomain;
-import br.com.manager.interns.API.domains.LeadDomain;
 import br.com.manager.interns.API.enums.BuddysEnum;
-import br.com.manager.interns.API.enums.InternsEnum;
 import br.com.manager.interns.API.interfaces.dto.ResponseBuddys;
-import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -20,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 @Component
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class ResponseBuddysMapper {
   private static ResponseBuddys buddysSkipExpand(BuddysDomain buddys) {

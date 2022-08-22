@@ -1,17 +1,13 @@
 package br.com.manager.interns.API.interfaces.controller;
 
-import br.com.manager.interns.API.domains.InternsDomain;
-import br.com.manager.interns.API.interfaces.dto.BuddysDTO;
-import br.com.manager.interns.API.interfaces.dto.InternsDTO;
-import br.com.manager.interns.API.interfaces.dto.PutInternsDTO;
+import br.com.manager.interns.API.interfaces.dto.PostInterns;
+import br.com.manager.interns.API.interfaces.dto.PutInterns;
 import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
-import br.com.manager.interns.API.service.impl.BuddysServiceImpl;
 import br.com.manager.interns.API.service.impl.InternsServiceImpl;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,9 +34,9 @@ public class InternsController {
 
   @PostMapping
   public ResponseEntity<Void> postInterns(
-      @Valid @RequestBody InternsDTO internsDTO
+      @Valid @RequestBody PostInterns postInterns
   ) {
-    internsService.postInterns(internsDTO);
+    internsService.postInterns(postInterns);
     return ResponseEntity.ok().build();
   }
 
@@ -78,9 +73,9 @@ public class InternsController {
   @PutMapping("/{internId}")
   public ResponseEntity<Void> putInterns(
       @PathVariable(value = "internId")UUID internId,
-      @Valid @RequestBody PutInternsDTO putInternsDTO
+      @Valid @RequestBody PutInterns putInterns
   ) {
-    internsService.putInterns(internId, putInternsDTO);
+    internsService.putInterns(internId, putInterns);
     return ResponseEntity.noContent().build();
   }
 

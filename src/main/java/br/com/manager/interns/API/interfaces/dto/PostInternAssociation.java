@@ -1,6 +1,7 @@
 package br.com.manager.interns.API.interfaces.dto;
 
-import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +11,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class InternsDTO {
-
-  @Size(max = 90)
-  private String name;
-
-  @Size(max = 255)
-  private String email;
-
+public class PostInternAssociation {
+  List<UUID> internsIds;
 }

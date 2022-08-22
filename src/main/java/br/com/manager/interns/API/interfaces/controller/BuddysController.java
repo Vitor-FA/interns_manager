@@ -1,7 +1,7 @@
 package br.com.manager.interns.API.interfaces.controller;
 
-import br.com.manager.interns.API.interfaces.dto.BuddysDTO;
-import br.com.manager.interns.API.interfaces.dto.PutBuddysDTO;
+import br.com.manager.interns.API.interfaces.dto.PostBuddys;
+import br.com.manager.interns.API.interfaces.dto.PutBuddys;
 import br.com.manager.interns.API.interfaces.dto.ResponseBuddys;
 import br.com.manager.interns.API.service.impl.BuddysServiceImpl;
 import java.util.List;
@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,9 +34,9 @@ public class BuddysController {
 
   @PostMapping
   public ResponseEntity<Void> postBuddys(
-      @Valid @RequestBody BuddysDTO buddysDTO
+      @Valid @RequestBody PostBuddys postBuddys
   ) {
-    buddysService.postBuddys(buddysDTO);
+    buddysService.postBuddys(postBuddys);
     return ResponseEntity.ok().build();
   }
 
@@ -74,7 +73,7 @@ public class BuddysController {
   @PutMapping("/{buddyId}")
   public ResponseEntity<Void> putBuddys(
       @PathVariable(value = "buddyId")UUID buddyId,
-      @Valid @RequestBody PutBuddysDTO buddysDTO
+      @Valid @RequestBody PutBuddys buddysDTO
   ) {
     buddysService.putBuddys(buddyId, buddysDTO);
     return ResponseEntity.noContent().build();

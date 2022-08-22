@@ -1,5 +1,6 @@
 package br.com.manager.interns.API.interfaces.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,11 +11,13 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class LeadDTO {
+public class PutInterns {
 
+  @NotBlank
   @Size(max = 90)
   private String name;
 
+  @NotBlank
   @Size(max = 255)
   private String email;
 

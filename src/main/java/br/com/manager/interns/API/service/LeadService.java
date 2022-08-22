@@ -1,11 +1,7 @@
 package br.com.manager.interns.API.service;
 
-import br.com.manager.interns.API.domains.InternsDomain;
-import br.com.manager.interns.API.domains.LeadDomain;
-import br.com.manager.interns.API.interfaces.dto.InternsDTO;
-import br.com.manager.interns.API.interfaces.dto.LeadDTO;
-import br.com.manager.interns.API.interfaces.dto.PutLeadDTO;
-import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
+import br.com.manager.interns.API.interfaces.dto.PostLead;
+import br.com.manager.interns.API.interfaces.dto.PutLead;
 import br.com.manager.interns.API.interfaces.dto.ResponseLead;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface LeadService {
 
-  void postLead(LeadDTO leadDTO);
+  void postLead(PostLead postLead);
 
   Page<ResponseLead> getAllLead(Pageable pageable, List<String> expand);
 
@@ -22,5 +18,5 @@ public interface LeadService {
 
   void deleteLead(UUID leadId);
 
-  void putLead(UUID leadId, PutLeadDTO putLeadDTO);
+  void putLead(UUID leadId, PutLead putLead);
 }

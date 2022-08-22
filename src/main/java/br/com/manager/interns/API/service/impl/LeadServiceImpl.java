@@ -1,22 +1,17 @@
 package br.com.manager.interns.API.service.impl;
 
-import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.domains.LeadDomain;
-import br.com.manager.interns.API.interfaces.dto.InternsDTO;
-import br.com.manager.interns.API.interfaces.dto.LeadDTO;
-import br.com.manager.interns.API.interfaces.dto.PutLeadDTO;
-import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
+import br.com.manager.interns.API.exception.EmailAlreadyExistException;
+import br.com.manager.interns.API.exception.ResourceNotFoundException;
+import br.com.manager.interns.API.interfaces.dto.PostLead;
+import br.com.manager.interns.API.interfaces.dto.PutLead;
 import br.com.manager.interns.API.interfaces.dto.ResponseLead;
-import br.com.manager.interns.API.mapper.ResponseInternsMapper;
 import br.com.manager.interns.API.mapper.ResponseLeadMapper;
-import br.com.manager.interns.API.repository.InternsRepository;
 import br.com.manager.interns.API.repository.LeadRepository;
 import br.com.manager.interns.API.service.LeadService;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -30,9 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@SuperBuilder
 @AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
 @CacheConfig(cacheNames = {"buddys", "interns", "leads"}, keyGenerator = "CustomKeyGenerator")
 public class LeadServiceImpl implements LeadService {
@@ -45,12 +38,12 @@ public class LeadServiceImpl implements LeadService {
   @Override
   @Transactional
   @CacheEvict(allEntries = true)
-  public void postLead(LeadDTO leadDTO) {
-    checkIfEmailIsUnique(leadDTO.getEmail());
+  public void postLead(PostLead postLead) {
+    checkIfEmailIsUnique(postLead.getEmail());
 
     modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-    var leadDomain = modelMapper.map(leadDTO, LeadDomain.class);
+    var leadDomain = modelMapper.map(postLead, LeadDomain.class);
 
     leadRepository.save(leadDomain);
   }
@@ -69,7 +62,7 @@ public class LeadServiceImpl implements LeadService {
   public ResponseLead getLeadById(UUID leadId, List<String> expand) {
     return this.leadRepository.findById(leadId).stream()
         .map(lead -> ResponseLeadMapper.convertToLeadResponse(lead, expand))
-        .findFirst().orElseThrow(RuntimeException::new);
+        .findFirst().orElseThrow(() -> new ResourceNotFoundException("Lead"));
   }
 
   @Override
@@ -84,8 +77,8 @@ public class LeadServiceImpl implements LeadService {
   @Override
   @Transactional
   @CacheEvict(allEntries = true)
-  public void putLead(UUID leadId, PutLeadDTO putLeadDTO) {
-    var mappedLead = modelMapper.map(putLeadDTO, LeadDomain.class);
+  public void putLead(UUID leadId, PutLead putLead) {
+    var mappedLead = modelMapper.map(putLead, LeadDomain.class);
     var lead = findLeadById(leadId);
 
     if (!lead.getEmail().equals(mappedLead.getEmail())) {
@@ -103,13 +96,13 @@ public class LeadServiceImpl implements LeadService {
         .findByEmail(email).isPresent();
 
     if (emailCadastrado) {
-      throw new RuntimeException("Email já cadastrado");
+      throw new EmailAlreadyExistException();
 
     }
   }
 
   private LeadDomain findLeadById(UUID leadId) {
-    return leadRepository.findById(leadId).orElseThrow(RuntimeException::new);
+    return leadRepository.findById(leadId).orElseThrow(() -> new ResourceNotFoundException("Lead"));
   }
 
 }

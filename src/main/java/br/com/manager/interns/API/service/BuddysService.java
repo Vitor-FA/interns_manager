@@ -1,8 +1,7 @@
 package br.com.manager.interns.API.service;
 
-import br.com.manager.interns.API.domains.BuddysDomain;
-import br.com.manager.interns.API.interfaces.dto.BuddysDTO;
-import br.com.manager.interns.API.interfaces.dto.PutBuddysDTO;
+import br.com.manager.interns.API.interfaces.dto.PostBuddys;
+import br.com.manager.interns.API.interfaces.dto.PutBuddys;
 import br.com.manager.interns.API.interfaces.dto.ResponseBuddys;
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BuddysService {
 
-  void postBuddys(BuddysDTO buddysDTO);
+  void postBuddys(PostBuddys postBuddys);
 
   Page<ResponseBuddys> getAllBuddys(Pageable pageable, List<String> expand);
 
@@ -19,6 +18,6 @@ public interface BuddysService {
 
   void deleteBuddys(UUID buddyId);
 
-  void putBuddys(UUID buddyId, PutBuddysDTO putBuddysDTO);
+  void putBuddys(UUID buddyId, PutBuddys putBuddys);
 
 }

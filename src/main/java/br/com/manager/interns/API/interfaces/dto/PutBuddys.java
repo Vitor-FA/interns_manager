@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class PutLeadDTO {
+public class PutBuddys {
 
   @NotBlank
   @Size(max = 90)

@@ -2,7 +2,7 @@ package br.com.manager.interns.API.interfaces.controller;
 
 import br.com.manager.interns.API.domains.CreatedAndNotCreatedObjects;
 import br.com.manager.interns.API.domains.DeletedAndNotDeletedObjects;
-import br.com.manager.interns.API.interfaces.dto.InternAssociationDTO;
+import br.com.manager.interns.API.interfaces.dto.PostInternAssociation;
 import br.com.manager.interns.API.service.impl.LeadInternsServiceImpl;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +24,15 @@ public class LeadInternsController {
 
   @PatchMapping
   public ResponseEntity<CreatedAndNotCreatedObjects> postBuddysInterns(
-      @RequestBody InternAssociationDTO internAssociationDTO,
-      @PathVariable(value = "leadId") UUID leadId) throws Exception {
-    return leadInternsService.createLeadIntern(leadId, internAssociationDTO.getInternsIds());
+      @RequestBody PostInternAssociation postInternAssociation,
+      @PathVariable(value = "leadId") UUID leadId) {
+    return leadInternsService.createLeadIntern(leadId, postInternAssociation.getInternsIds());
   }
 
   @DeleteMapping
   public ResponseEntity<DeletedAndNotDeletedObjects> deleteBuddysInterns(
-      @RequestBody InternAssociationDTO internAssociationDTO,
-      @PathVariable(value = "leadId") UUID leadId) throws Exception {
-    return leadInternsService.deleteLeadIntern(leadId, internAssociationDTO.getInternsIds());
+      @RequestBody PostInternAssociation postInternAssociation,
+      @PathVariable(value = "leadId") UUID leadId) {
+    return leadInternsService.deleteLeadIntern(leadId, postInternAssociation.getInternsIds());
   }
 }
