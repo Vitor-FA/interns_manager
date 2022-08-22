@@ -1,7 +1,7 @@
 package br.com.manager.interns.API.interfaces.controller;
 
-import br.com.manager.interns.API.interfaces.dto.LeadDTO;
-import br.com.manager.interns.API.interfaces.dto.PutLeadDTO;
+import br.com.manager.interns.API.interfaces.dto.PostLead;
+import br.com.manager.interns.API.interfaces.dto.PutLead;
 import br.com.manager.interns.API.interfaces.dto.ResponseLead;
 import br.com.manager.interns.API.service.impl.LeadServiceImpl;
 import java.util.List;
@@ -9,8 +9,6 @@ import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,9 +34,9 @@ public class LeadController {
 
   @PostMapping
   public ResponseEntity<Void> postLead(
-      @Valid @RequestBody LeadDTO LeadDTO
+      @Valid @RequestBody PostLead postLead
   ) {
-    leadService.postLead(LeadDTO);
+    leadService.postLead(postLead);
     return ResponseEntity.ok().build();
   }
 
@@ -76,9 +73,9 @@ public class LeadController {
   @PutMapping("/{leadId}")
   public ResponseEntity<Void> putLead(
       @PathVariable(value = "leadId")UUID leadId,
-      @Valid @RequestBody PutLeadDTO putLeadDTO
+      @Valid @RequestBody PutLead putLead
   ) {
-    leadService.putLead(leadId, putLeadDTO);
+    leadService.putLead(leadId, putLead);
     return ResponseEntity.noContent().build();
   }
 

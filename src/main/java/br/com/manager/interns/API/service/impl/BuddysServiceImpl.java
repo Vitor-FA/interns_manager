@@ -1,9 +1,10 @@
 package br.com.manager.interns.API.service.impl;
 
 import br.com.manager.interns.API.domains.BuddysDomain;
-import br.com.manager.interns.API.domains.InternsDomain;
-import br.com.manager.interns.API.interfaces.dto.BuddysDTO;
-import br.com.manager.interns.API.interfaces.dto.PutBuddysDTO;
+import br.com.manager.interns.API.exception.EmailAlreadyExistException;
+import br.com.manager.interns.API.exception.ResourceNotFoundException;
+import br.com.manager.interns.API.interfaces.dto.PostBuddys;
+import br.com.manager.interns.API.interfaces.dto.PutBuddys;
 import br.com.manager.interns.API.interfaces.dto.ResponseBuddys;
 import br.com.manager.interns.API.mapper.ResponseBuddysMapper;
 import br.com.manager.interns.API.repository.BuddysRepository;
@@ -11,8 +12,6 @@ import br.com.manager.interns.API.service.BuddysService;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -26,9 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@SuperBuilder
 @AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
 @CacheConfig(cacheNames = {"buddys", "interns", "leads"}, keyGenerator = "CustomKeyGenerator")
 public class BuddysServiceImpl  implements BuddysService {
@@ -41,10 +38,12 @@ public class BuddysServiceImpl  implements BuddysService {
   @Override
   @Transactional
   @CacheEvict(allEntries = true)
-  public void postBuddys(BuddysDTO buddysDTO) {
+  public void postBuddys(PostBuddys postBuddys) {
     modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-    var buddyDomain = modelMapper.map(buddysDTO, BuddysDomain.class);
+    checkIfEmailIsUnique(postBuddys.getEmail());
+
+    var buddyDomain = modelMapper.map(postBuddys, BuddysDomain.class);
 
     buddysRepository.save(buddyDomain);
   }
@@ -63,7 +62,7 @@ public class BuddysServiceImpl  implements BuddysService {
   public ResponseBuddys getBuddysById(UUID buddyId, List<String> expand) {
     return this.buddysRepository.findById(buddyId).stream()
         .map(buddys -> ResponseBuddysMapper.convertToBuddysResponse(buddys, expand))
-        .findFirst().orElseThrow(RuntimeException::new);
+        .findFirst().orElseThrow(() -> new ResourceNotFoundException("Buddy"));
   }
 
   @Override
@@ -78,8 +77,8 @@ public class BuddysServiceImpl  implements BuddysService {
   @Override
   @Transactional
   @CacheEvict(allEntries = true)
-  public void putBuddys(UUID buddyId, PutBuddysDTO putBuddysDTO) {
-    var mappedBuddy = modelMapper.map(putBuddysDTO, BuddysDomain.class);
+  public void putBuddys(UUID buddyId, PutBuddys putBuddys) {
+    var mappedBuddy = modelMapper.map(putBuddys, BuddysDomain.class);
     var buddy = findBuddyById(buddyId);
 
     if (!buddy.getEmail().equals(mappedBuddy.getEmail())) {
@@ -97,12 +96,12 @@ public class BuddysServiceImpl  implements BuddysService {
         .findByEmail(email).isPresent();
 
     if (emailCadastrado) {
-      throw new RuntimeException("Email já cadastrado");
+      throw new EmailAlreadyExistException();
 
     }
   }
 
   private BuddysDomain findBuddyById(UUID buddyId) {
-    return buddysRepository.findById(buddyId).orElseThrow(RuntimeException::new);
+    return buddysRepository.findById(buddyId).orElseThrow(() -> new ResourceNotFoundException("Buddy"));
   }
 }

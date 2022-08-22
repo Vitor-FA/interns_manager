@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class BuddysDTO {
+public class PostInterns {
 
   @Size(max = 90)
   private String name;

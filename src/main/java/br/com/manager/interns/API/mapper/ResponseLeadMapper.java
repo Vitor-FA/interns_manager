@@ -1,15 +1,11 @@
 package br.com.manager.interns.API.mapper;
 
-import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.domains.LeadDomain;
-import br.com.manager.interns.API.enums.InternsEnum;
 import br.com.manager.interns.API.enums.LeadEnum;
-import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
 import br.com.manager.interns.API.interfaces.dto.ResponseLead;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 @Component
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class ResponseLeadMapper {
 

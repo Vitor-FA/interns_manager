@@ -2,7 +2,7 @@ package br.com.manager.interns.API.interfaces.controller;
 
 import br.com.manager.interns.API.domains.CreatedAndNotCreatedObjects;
 import br.com.manager.interns.API.domains.DeletedAndNotDeletedObjects;
-import br.com.manager.interns.API.interfaces.dto.InternAssociationDTO;
+import br.com.manager.interns.API.interfaces.dto.PostInternAssociation;
 import br.com.manager.interns.API.service.impl.BuddysInternsServiceImpl;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +25,16 @@ public class BuddyInternsController {
 
   @PatchMapping
   public ResponseEntity<CreatedAndNotCreatedObjects> postBuddysInterns(
-      @RequestBody InternAssociationDTO internAssociationDTO,
-      @PathVariable(value = "buddysId") UUID buddysId) throws Exception {
-    return buddysInternsService.createBuddyIntern(buddysId, internAssociationDTO.getInternsIds());
+      @RequestBody PostInternAssociation postInternAssociation,
+      @PathVariable(value = "buddysId") UUID buddysId) {
+    return buddysInternsService.createBuddyIntern(buddysId, postInternAssociation.getInternsIds());
   }
 
   @DeleteMapping
   public ResponseEntity<DeletedAndNotDeletedObjects> deleteBuddysInterns(
-      @RequestBody InternAssociationDTO internAssociationDTO,
-      @PathVariable(value = "buddysId") UUID buddysId) throws Exception {
-    return buddysInternsService.deleteBuddyIntern(buddysId, internAssociationDTO.getInternsIds());
+      @RequestBody PostInternAssociation postInternAssociation,
+      @PathVariable(value = "buddysId") UUID buddysId) {
+    return buddysInternsService.deleteBuddyIntern(buddysId, postInternAssociation.getInternsIds());
   }
 
 }

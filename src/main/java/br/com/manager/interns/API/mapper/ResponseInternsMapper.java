@@ -1,20 +1,10 @@
 package br.com.manager.interns.API.mapper;
 
-import br.com.manager.interns.API.domains.BuddysDomain;
 import br.com.manager.interns.API.domains.InternsDomain;
-import br.com.manager.interns.API.domains.LeadDomain;
 import br.com.manager.interns.API.enums.InternsEnum;
 import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 @Component
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class ResponseInternsMapper {
+public final class ResponseInternsMapper {
 
   private static ResponseInterns internsSkipExpand(InternsDomain interns) {
     ModelMapper modelMapper = new ModelMapper();

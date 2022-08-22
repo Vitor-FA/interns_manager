@@ -1,6 +1,5 @@
 package br.com.manager.interns.API.repository;
 
-import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.domains.LeadDomain;
 import java.util.Optional;
 import java.util.UUID;
