@@ -11,7 +11,7 @@ import br.com.manager.interns.API.repository.BuddysRepository;
 import br.com.manager.interns.API.service.BuddysService;
 import java.util.List;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -21,11 +21,12 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 @CacheConfig(cacheNames = {"buddys", "interns", "leads"}, keyGenerator = "CustomKeyGenerator")
 public class BuddysServiceImpl  implements BuddysService {
@@ -38,7 +39,7 @@ public class BuddysServiceImpl  implements BuddysService {
   @Override
   @Transactional
   @CacheEvict(allEntries = true)
-  public void postBuddys(PostBuddys postBuddys) {
+  public BuddysDomain postBuddys(PostBuddys postBuddys) {
     modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
     checkIfEmailIsUnique(postBuddys.getEmail());
@@ -46,6 +47,8 @@ public class BuddysServiceImpl  implements BuddysService {
     var buddyDomain = modelMapper.map(postBuddys, BuddysDomain.class);
 
     buddysRepository.save(buddyDomain);
+
+    return buddyDomain;
   }
 
   @Override

@@ -1,5 +1,6 @@
 package br.com.manager.interns.API.service;
 
+import br.com.manager.interns.API.domains.InternsDomain;
 import br.com.manager.interns.API.interfaces.dto.PostInterns;
 import br.com.manager.interns.API.interfaces.dto.PutInterns;
 import br.com.manager.interns.API.interfaces.dto.ResponseInterns;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface InternsService {
 
-  void postInterns(PostInterns postInterns);
+  InternsDomain postInterns(PostInterns postInterns);
 
   Page<ResponseInterns> getAllInterns(Pageable pageable, List<String> expand);
 

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,8 +37,10 @@ public class BuddysController {
   public ResponseEntity<Void> postBuddys(
       @Valid @RequestBody PostBuddys postBuddys
   ) {
-    buddysService.postBuddys(postBuddys);
-    return ResponseEntity.ok().build();
+    var buddy = buddysService.postBuddys(postBuddys);
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .header("id", buddy.getId().toString())
+        .build();
   }
 
   @GetMapping

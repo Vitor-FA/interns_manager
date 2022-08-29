@@ -38,7 +38,7 @@ public class LeadServiceImpl implements LeadService {
   @Override
   @Transactional
   @CacheEvict(allEntries = true)
-  public void postLead(PostLead postLead) {
+  public LeadDomain postLead(PostLead postLead) {
     checkIfEmailIsUnique(postLead.getEmail());
 
     modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -46,6 +46,8 @@ public class LeadServiceImpl implements LeadService {
     var leadDomain = modelMapper.map(postLead, LeadDomain.class);
 
     leadRepository.save(leadDomain);
+
+    return leadDomain;
   }
 
   @Override
