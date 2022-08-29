@@ -38,7 +38,7 @@ public class InternsServiceImpl implements InternsService {
   @Override
   @Transactional
   @CacheEvict(allEntries = true)
-  public void postInterns(PostInterns postInterns) {
+  public InternsDomain postInterns(PostInterns postInterns) {
     checkIfEmailIsUnique(postInterns.getEmail());
 
     modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -46,6 +46,8 @@ public class InternsServiceImpl implements InternsService {
     var internDomain = modelMapper.map(postInterns, InternsDomain.class);
 
     internsRepository.save(internDomain);
+
+    return internDomain;
   }
 
   @Override

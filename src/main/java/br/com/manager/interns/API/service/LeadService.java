@@ -1,5 +1,6 @@
 package br.com.manager.interns.API.service;
 
+import br.com.manager.interns.API.domains.LeadDomain;
 import br.com.manager.interns.API.interfaces.dto.PostLead;
 import br.com.manager.interns.API.interfaces.dto.PutLead;
 import br.com.manager.interns.API.interfaces.dto.ResponseLead;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface LeadService {
 
-  void postLead(PostLead postLead);
+  LeadDomain postLead(PostLead postLead);
 
   Page<ResponseLead> getAllLead(Pageable pageable, List<String> expand);
 

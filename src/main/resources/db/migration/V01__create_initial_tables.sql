@@ -1,0 +1,18 @@
+CREATE TABLE interns (
+  id UUID NOT NULL, email
+  VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(90) NOT NULL,
+  "lead_id" UUID NULL
+);
+
+CREATE TABLE buddys (
+  id UUID NOT NULL, email
+  VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(90) NOT NULL
+);
+
+CREATE TABLE leads (
+  id UUID NOT NULL, email
+  VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(90) NOT NULL
+);
